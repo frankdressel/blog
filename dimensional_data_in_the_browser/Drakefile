@@ -1,0 +1,25 @@
+data.prepare <-
+  mkdir pm10_2016_saxony_daily
+  split -l 222 pm10_2016_saxony_daily.csv ./pm10_2016_saxony_daily/file --additional-suffix .csv 
+  find pm10_2016_saxony_daily -iname '*.csv' -exec sed -i '2d' {} \;
+  find pm10_2016_saxony_daily -iname '*.csv' -exec sed -i '221d' {} \;
+  csvjoin -c "Datum Zeit" -d ";" -e ISO-8859-1 pm10_2016_saxony_daily/*.csv > pm10_2016_saxony_daily.total.csv
+  uniqRows=$(head -n 1 pm10_2016_saxony_daily.total.csv | grep -Po '[^,]*' | sed 's/^ *//g' | sed 's/ *$//g' | sort | uniq | tr '\n' ',' | sed s'/.$//' | sed '1 s/-/_/g' | sed '1 s/[,] /,/g')
+  echo "$uniqRows"
+  cat pm10_2016_saxony_daily.total.csv | sed '1 s/-/_/g' | sed '1 s/[,] /,/g' | csvcut -c "$uniqRows"  > $OUTPUT
+  rm -r pm10_2016_saxony_daily
+
+data.normalizeDate <- data.prepare
+  cat $INPUT | sed 's/\([[:digit:]][[:digit:]]\)-\([[:digit:]][[:digit:]]\)-\([[:digit:]][[:digit:]]\)/20\3-\2-\1/g' > $OUTPUT
+
+data.dimensional <- data.normalizeDate
+  cat $INPUT | ./melt.R > molten
+
+  start=$(cat data.normalizeDate | csvsql --query 'select min("Datum Zeit") from stdin' | sed '1d')
+  end=$(cat data.normalizeDate | csvsql --query 'select max("Datum Zeit") from stdin' | sed '1d')
+
+  java -jar datacreator/target/datacreator.jar $start $end > datedimension.csv
+
+  csvjoin -c "Datum Zeit, Date" molten datedimension.csv | csvcut -C "Date" > $OUTPUT
+
+  rm datedimension.csv && rm molten

@@ -1,0 +1,7 @@
+pm10_2016_saxony_daily.total.csv
+.drake/
+drake.log
+data.*
+pm10_2016_saxony_daily
+datacreator/target/
+*.swp
