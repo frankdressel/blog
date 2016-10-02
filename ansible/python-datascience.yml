@@ -1,0 +1,19 @@
+---
+- name: install python for data science
+  hosts: ansibletest
+  become: true
+  
+  tasks:
+    - name: Get aptitude for upgrade
+      apt: pkg=aptitude state=present
+
+    - name: install base packages
+      apt: pkg={{item}} state=present
+      with_items:
+        - python3
+        - python3-pip
+
+    - name: Install global python requirements
+      pip: name={{item}} state=present executable=pip3
+      with_items:
+        - pandas
