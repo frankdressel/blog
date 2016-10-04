@@ -2,20 +2,21 @@ set nocompatible
 filetype off
 syntax on
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
 
 " let Vundle manage Vundle
 " required!
-Bundle 'gmarik/vundle'
-Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-Bundle 'scrooloose/nerdtree'
-" Bundle 'klen/python-mode'
-Bundle 'jnurmine/Zenburn'
-Bundle 'scrooloose/syntastic'
-Bundle 'kien/ctrlp.vim'
-Bundle 'gabrielelana/vim-markdown'
-Bundle 'davidhalter/jedi-vim'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'gmarik/vundle'
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'scrooloose/nerdtree'
+" Plugin 'klen/python-mode'
+Plugin 'jnurmine/Zenburn'
+Plugin 'scrooloose/syntastic'
+Plugin 'kien/ctrlp.vim'
+Plugin 'gabrielelana/vim-markdown'
+Plugin 'davidhalter/jedi-vim'
 
 filetype plugin indent on
 autocmd FileType yaml setl indentkeys-=<:>
