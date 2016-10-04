@@ -17,6 +17,7 @@ Plugin 'scrooloose/syntastic'
 Plugin 'kien/ctrlp.vim'
 Plugin 'gabrielelana/vim-markdown'
 Plugin 'davidhalter/jedi-vim'
+call vundle#end()
 
 filetype plugin indent on
 autocmd FileType yaml setl indentkeys-=<:>

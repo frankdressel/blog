@@ -1,5 +1,5 @@
 ---
-- name: install python for data science
+- name: install vim
   hosts: all
   become: true
 
@@ -44,7 +44,7 @@
         chdir: /home/{{ ansible_ssh_user }}/vim
 
     - name: make
-      command: make VIMRUNTIMEDIR=/usr/share/vim
+      command: make VIMRUNTIMEDIR=/usr/share/vim/vim80
       args:
         chdir: /home/{{ ansible_ssh_user }}/vim
 
@@ -52,4 +52,20 @@
       command: checkinstall
       args:
         chdir: /home/{{ ansible_ssh_user }}/vim
+        creates: /usr/bin/vim
 
+- name: setup vim
+  hosts: all
+
+  tasks:
+    - name: install vundle
+      git: repo=https://github.com/VundleVim/Vundle.vim.git dest=/home/{{ ansible_ssh_user }}/.vim/bundle/Vundle.vim
+
+    - name: clone vimrc
+      git: repo=https://github.com/frankdressel/blog.git dest=/tmp/blog
+
+    - name: copy vimrc
+      command: cp /tmp/blog/ansible/.vimrc /home/{{ ansible_ssh_user }}
+
+    - name: install vim plugins
+      command: vim +PluginInstall +qall
