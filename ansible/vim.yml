@@ -1,0 +1,55 @@
+---
+- name: install python for data science
+  hosts: all
+  become: true
+
+  tasks:
+    - name: get aptitude for upgrade
+      apt: pkg=aptitude state=present
+
+    - name: remove old vim
+      apt: pkg={{ item }} state=absent
+      with_items:
+        - vim
+        - vim-runtime
+        - vim-tiny
+        - vim-common
+        - gvim
+
+    - name: install base packages
+      apt: pkg={{item}} state=present
+      with_items:
+        - libncurses5-dev
+        - libgnome2-dev
+        - libgnomeui-dev
+        - libgtk2.0-dev
+        - libatk1.0-dev
+        - libbonoboui2-dev
+        - libcairo2-dev
+        - libx11-dev
+        - libxpm-dev
+        - libxt-dev
+        - python-dev
+        - python3-dev
+        - ruby-dev
+        - git
+        - checkinstall
+
+    - name: clone vim
+      git: repo=https://github.com/vim/vim.git  dest=/home/{{ ansible_ssh_user }}/vim
+
+    - name: configure
+      command: ./configure --with-features=huge --enable-multibyte --enable-rubyinterp --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config --enable-python3interp --with-python3-config-dir=/usr/lib/python3.5/config --enable-perlinterp --enable-gui=gtk2 --enable-cscope --prefix=/usr
+      args:
+        chdir: /home/{{ ansible_ssh_user }}/vim
+
+    - name: make
+      command: make VIMRUNTIMEDIR=/usr/share/vim
+      args:
+        chdir: /home/{{ ansible_ssh_user }}/vim
+
+    - name: checkinstall
+      command: checkinstall
+      args:
+        chdir: /home/{{ ansible_ssh_user }}/vim
+
