@@ -1,5 +1,15 @@
 # -*- mode: ruby -*-
-# vi: set ft=ruby :
+# # vi: set ft=ruby :
+
+$script = <<SCRIPT
+cat << EOT >> /etc/sysctl.conf
+
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+EOT
+sysctl -p
+SCRIPT
 
 Vagrant.configure(2) do |config|
   config.vm.box = "debian/jessie64"
@@ -13,5 +23,7 @@ Vagrant.configure(2) do |config|
     vb.memory = "2048"
     vb.cpus = "2"
   end
-end
 
+  config.vm.provision "shell", inline: $script
+
+end
