@@ -1,6 +1,6 @@
 ---
 - name: install vim
-  hosts: all
+  hosts: ansibletest
   become: true
 
   tasks:
