@@ -29,30 +29,20 @@
         - libx11-dev
         - libxpm-dev
         - libxt-dev
+        - python
         - python-dev
-        - python3-dev
         - ruby-dev
         - git
         - checkinstall
 
     - name: clone vim
-      git: repo=https://github.com/vim/vim.git  dest=/home/{{ ansible_ssh_user }}/vim
+      git: repo=https://github.com/vim/vim.git  dest=/tmp/vim
 
-    - name: configure
-      command: ./configure --with-features=huge --enable-multibyte --enable-rubyinterp --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config --enable-python3interp --with-python3-config-dir=/usr/lib/python3.5/config --enable-perlinterp --enable-gui=gtk2 --enable-cscope --prefix=/usr
-      args:
-        chdir: /home/{{ ansible_ssh_user }}/vim
+    - name: install vim
+      script: installVim.sh
 
-    - name: make
-      command: make VIMRUNTIMEDIR=/usr/share/vim/vim80
-      args:
-        chdir: /home/{{ ansible_ssh_user }}/vim
-
-    - name: checkinstall
-      command: checkinstall
-      args:
-        chdir: /home/{{ ansible_ssh_user }}/vim
-        creates: /usr/bin/vim
+    - name: remove vim directory
+      command: rm -rf /tmp/vim
 
 - name: setup vim
   hosts: all
