@@ -1,6 +1,5 @@
 set nocompatible
 filetype off
-syntax on
 
 set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
@@ -21,6 +20,8 @@ call vundle#end()
 
 filetype plugin indent on
 autocmd FileType yaml setl indentkeys-=<:>
+
+syntax on
 
 " Powerline setup
 set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
@@ -58,7 +59,8 @@ set shiftwidth=4
 set expandtab
 
 set t_Co=256
-colors zenburn
+" Taken from: https://sanctum.geek.nz/arabesque/gracefully-degrading-vimrc/
+silent! colors zenburn
 
 set number
 
