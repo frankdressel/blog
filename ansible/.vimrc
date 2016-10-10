@@ -10,12 +10,14 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'gmarik/vundle'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'scrooloose/nerdtree'
-" Plugin 'klen/python-mode'
 Plugin 'jnurmine/Zenburn'
 Plugin 'scrooloose/syntastic'
 Plugin 'kien/ctrlp.vim'
 Plugin 'gabrielelana/vim-markdown'
-Plugin 'davidhalter/jedi-vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'Raimondi/delimitMate'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 call vundle#end()
 
 filetype plugin indent on
@@ -28,29 +30,6 @@ set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 set laststatus=2
 
 map <F2> :NERDTreeToggle<CR>
-
-" Python-mode setup
-" let g:pymode_rope = 1
-" 
-" let g:pymode_doc = 1
-" let g:pymode_doc_key = 'K'
-" 
-" let g:pymode_lint = 1
-" let g:pymode_lint_checker = "pyflakes,pep8"
-" 
-" let g:pymode_lint_write = 1
-" 
-" let g:pymode_virtualenv = 1
-" 
-" let g:pymode_breakpoint = 1
-" let g:pymode_breakpoint_bind = '<leader>b'
-" 
-" let g:pymode_syntax = 1
-" let g:pymode_syntax_all = 1
-" let g:pymode_syntax_indent_errors = g:pymode_syntax_all
-" let g:pymode_syntax_space_errors = g:pymode_syntax_all
-" 
-" let g:pymode_folding = 0
 
 set autochdir
 
