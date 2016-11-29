@@ -1,0 +1,13 @@
+---
+- hosts: cloud
+  pre_tasks:
+    - service: name=fail2ban state=stopped
+      ignore_errors: yes
+    - name: Read variables
+      include_vars: users.yml
+      tags: createuser
+  roles:
+    - iptables  
+    - fail2ban
+    - { role: users, name: "{{ users.0.name }}", key: "{{ users.0.key }}", tags: createuser}
+    - { role: users, name: "{{ users.1.name }}", key: "{{ users.1.key }}", tags: createuser}

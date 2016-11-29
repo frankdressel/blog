@@ -1,0 +1,12 @@
+- name: Create user
+  user:
+    name: "{{ name }}"
+    state: present
+    password: "{{ lookup('password', '/tmp/passwordfile') }}"
+    shell: /bin/bash
+  become: true
+
+- name: Setup keys
+  authorized_key:
+    user: "{{ name }}"
+    key: "{{ key }}" 

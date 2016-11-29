@@ -1,0 +1,47 @@
+- name: Create iptables base directory
+  file: path=/etc/iptables owner=root group=root state=directory
+  become: yes
+
+- name: Create iptables v4 files
+  file: path=/etc/iptables/rules.v4 owner=root group=root state=touch
+  become: yes
+- name: Create iptables v6 files
+  file: path=/etc/iptables/rules.v6 owner=root group=root state=touch
+  become: yes
+
+- name: Implement ip4 rules
+  iptables_raw:
+    keep_unmanaged=no
+    name=default_rules
+    rules='-A INPUT -i lo -j ACCEPT\n
+           -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT\n
+           -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\n
+           -A INPUT -p icmp -m icmp --icmp-type 8 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT\n
+           -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT\n
+           -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT\n
+           -A INPUT -j DROP'
+  become: yes          
+- name: Implement ip6 rules
+  iptables_raw:
+    ipversion=6
+    keep_unmanaged=no
+    name=Default_rules
+    rules='-A INPUT -i lo -j ACCEPT\n
+           -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT\n
+           -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\n
+           -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT\n
+           -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT\n
+           -A INPUT -j DROP'
+  become: yes          
+
+# Taken from: http://askubuntu.com/a/340846
+- name: prevent the iptables-peristent install dialog
+  debconf: name=iptables-persistent question={{ item }} vtype=boolean value=true
+  with_items:
+  - iptables-persistent/autosave_v4
+  - iptables-persistent/autosave_v6
+  become: yes
+
+- name: install iptables-persistent
+  apt: name=iptables-persistent
+  become: yes
