@@ -1,5 +1,6 @@
 package de.moduliertersingvogel.visualisationserver;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -7,11 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -28,9 +25,9 @@ public class DataBroker {
 	private static Logger logger = LogManager.getLogger("de.moduliertersingvogel.visualisationserver");;
 
 	@POST
-	@Path("{topic}")
+	@Path("{topic}/multiple")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response receiveData(@PathParam("topic") String topic, List<List<RawData>> data) {
+	public Response receiveMultiple(@PathParam("topic") String topic, List<List<RawData>> data) {
 		logger.debug("Receiving data for topic: " + topic);
 
 		HashMap<String, Data> hashMap = new HashMap<>();
@@ -54,6 +51,30 @@ public class DataBroker {
 			Files.write(Paths.get(topic, System.nanoTime() + ""),
 					list.stream().map(d -> d.toString()).collect(Collectors.toList()));
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Response response = null;
+		return response;
+	}
+	
+	@POST
+	@Path("{topic}/single")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response receiveSingle(@PathParam("topic") String topic, Data[] input) {
+		logger.debug("Receiving data for topic: " + topic);
+
+		List<Data> data = Arrays.asList(input);
+		data.sort((a, b) -> a.date.compareTo(b.date));
+
+		try {
+			java.nio.file.Path path = Paths.get(topic, System.nanoTime() + "");
+			File file = path.toAbsolutePath().toFile();
+			file.getParentFile().mkdirs();
+			file.createNewFile();
+			Files.write(path,
+					data.stream().map(d -> d.toString()).collect(Collectors.toList()));
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
