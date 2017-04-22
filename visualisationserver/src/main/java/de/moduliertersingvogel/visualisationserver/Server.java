@@ -13,6 +13,8 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import com.sun.net.httpserver.HttpServer;
+
 public class Server {
 	private static final int PORT = 8080;
 	private static Logger logger = LogManager.getLogger("de.moduliertersingvogel.visualisationserver");;
@@ -36,7 +38,7 @@ public class Server {
 
 		URI uri = UriBuilder.fromUri("http://" + hostName + "/").port(PORT).build();
 
-		JdkHttpServerFactory.createHttpServer(uri, resourceConfig);
+		HttpServer server = JdkHttpServerFactory.createHttpServer(uri, resourceConfig);
 		logger.info("Server started");
 	}
 }
