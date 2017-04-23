@@ -3,7 +3,6 @@ package de.moduliertersingvogel.visualisationserver;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,11 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,14 +50,13 @@ public class DataBroker {
 		list.sort((a, b) -> a.date.compareTo(b.date));
 
 		try {
-			Files.write(Paths.get(topic, System.nanoTime() + ""),
+			Files.write(Utils.getTopicFilePath(topic),
 					list.stream().map(d -> d.toString()).collect(Collectors.toList()));
+			return Response.status(Status.CREATED).build();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(Arrays.stream(e.getStackTrace()).map(s->s.toString()).collect(Collectors.joining("\n")));
+			return Response.serverError().entity("Error while writing file.").build();
 		}
-
-		Response response = null;
-		return response;
 	}
 	
 	@POST
@@ -68,17 +69,29 @@ public class DataBroker {
 		data.sort((a, b) -> a.date.compareTo(b.date));
 
 		try {
-			java.nio.file.Path path = Paths.get(topic, System.nanoTime() + "");
+			java.nio.file.Path path = Utils.getTopicFilePath(topic);
 			File file = path.toAbsolutePath().toFile();
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 			Files.write(path,
 					data.stream().map(d -> d.toString()).collect(Collectors.toList()));
+			return Response.status(Status.CREATED).build();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(Arrays.stream(e.getStackTrace()).map(s->s.toString()).collect(Collectors.joining("\n")));
+			return Response.serverError().entity("Error while writing file.").build();
 		}
-
-		Response response = null;
-		return response;
+	}
+	
+	@GET
+	@Path("{topic}/{file}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response getFile(@PathParam("topic") String topic, @PathParam("file") String file){
+		try {
+			String content = Files.readAllLines(Utils.getTopicPath(topic).resolve(file)).stream().collect(Collectors.joining("\n"));
+			return Response.ok(content).build();
+		} catch (IOException e) {
+			logger.error(Arrays.stream(e.getStackTrace()).map(s->s.toString()).collect(Collectors.joining("\n")));
+			return Response.serverError().entity("Error while retrieving file.").build();
+		}
 	}
 }

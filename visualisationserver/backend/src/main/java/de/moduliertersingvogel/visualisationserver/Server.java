@@ -1,9 +1,12 @@
 package de.moduliertersingvogel.visualisationserver;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.core.UriBuilder;
 
@@ -20,6 +23,11 @@ public class Server {
 	private static Logger logger = LogManager.getLogger("de.moduliertersingvogel.visualisationserver");;
 
 	public static void main(String[] args) {
+		File baseFile=Utils.getTopicBasePath().toAbsolutePath().toFile();
+		if(!baseFile.exists()){
+			baseFile.mkdirs();
+		}
+		
 		ResourceConfig resourceConfig = new ResourceConfig();
 		resourceConfig.packages("de.moduliertersingvogel.visualisationserver");
 		resourceConfig.register(JacksonFeature.class);
@@ -33,7 +41,7 @@ public class Server {
 			hostName = InetAddress.getLocalHost().getCanonicalHostName();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
-			logger.error("Could not get hostname.", e);
+			logger.error("Could not get hostname.", Arrays.stream(e.getStackTrace()).map(s->s.toString()).collect(Collectors.joining("\n")));
 		}
 
 		URI uri = UriBuilder.fromUri("http://" + hostName + "/").port(PORT).build();
