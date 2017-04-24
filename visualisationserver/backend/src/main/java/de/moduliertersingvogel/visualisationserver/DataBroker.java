@@ -34,7 +34,7 @@ public class DataBroker {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response receiveMultiple(@PathParam("topic") String topic, List<List<RawData>> data) {
 		logger.debug("Receiving data for topic: " + topic);
-		boolean validData = data.stream().map(l->l.stream().map(r->r.date instanceof String).reduce((p, c)->p&&c).get()).reduce((p, c)->p&&c).get();
+		boolean validData = data.stream().map(l->l.stream().map(r->r.date instanceof String || r.date instanceof Number).reduce((p, c)->p&&c).get()).reduce((p, c)->p&&c).get();
 		if(!validData){
 			return Response.serverError().entity("Date field needs to be string or double.").build();
 		}
@@ -78,7 +78,7 @@ public class DataBroker {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response receiveSingle(@PathParam("topic") String topic, Data[] input) {
 		logger.debug("Receiving data for topic: " + topic);
-		boolean validData = Arrays.stream(input).map(d->d.date instanceof String).reduce((p, c)->p&&c).get();
+		boolean validData = Arrays.stream(input).map(d->d.date instanceof String || d.date instanceof Number).reduce((p, c)->p&&c).get();
 		if(!validData){
 			return Response.serverError().entity("Date field needs to be string or double.").build();
 		}
