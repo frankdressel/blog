@@ -1,13 +1,13 @@
-package de.moduliertersingvogel.visualisationserver;
+package de.moduliertersingvogel.visualisationutils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Data {
-	public final String date;
+	public final Object date;
 	public final List<Object> values;
 
-	public Data(String date, List<Object> values) {
+	public Data(Object date, List<Object> values) {
 		this.date = date;
 		this.values = values;
 	}
