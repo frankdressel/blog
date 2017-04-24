@@ -1,10 +1,6 @@
 package de.moduliertersingvogel.visualisationclient;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -13,6 +9,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 
@@ -34,6 +31,7 @@ public class Client {
 			HttpPost httpPost = new HttpPost(this.uri+"/"+topic+"/single");
 			httpPost.setEntity(new StringEntity(gson.toJson(data), ContentType.APPLICATION_JSON));
 			CloseableHttpResponse response = client.execute(httpPost);
+			System.out.println(EntityUtils.toString(response.getEntity()));
 		} catch (IOException e) {
 			throw new ClientException(e);
 		}
