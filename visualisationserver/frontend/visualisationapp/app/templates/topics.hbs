@@ -1,0 +1,8 @@
+<h2>Topics</h2>
+<ul>
+  {{#each model as |topic|}}
+      {{#link-to 'topic' topic}}
+	{{topic}}
+      {{/link-to}}
+  {{/each}}
+</ul>
