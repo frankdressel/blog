@@ -40,8 +40,7 @@ public class Server {
 		try {
 			hostName = InetAddress.getLocalHost().getCanonicalHostName();
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
-			logger.error("Could not get hostname.", Arrays.stream(e.getStackTrace()).map(s->s.toString()).collect(Collectors.joining("\n")));
+			logger.catching(e);
 		}
 
 		URI uri = UriBuilder.fromUri("http://" + hostName + "/").port(PORT).build();

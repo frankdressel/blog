@@ -15,7 +15,7 @@ define('visualisationapp/tests/components/dygraph-fileview.lint-test', ['exports
   QUnit.module('ESLint - components/dygraph-fileview.js');
   QUnit.test('should pass ESLint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'components/dygraph-fileview.js should pass ESLint.\n8:17  - \'location\' is assigned a value but never used. (no-unused-vars)\n13:17  - \'g\' is assigned a value but never used. (no-unused-vars)\n13:25  - \'Dygraph\' is not defined. (no-undef)');
+    assert.ok(false, 'components/dygraph-fileview.js should pass ESLint.\n8:17  - \'location\' is assigned a value but never used. (no-unused-vars)\n13:17  - \'g\' is assigned a value but never used. (no-unused-vars)\n13:21  - \'draw\' is not defined. (no-undef)\n17:20  - \'Dygraph\' is not defined. (no-undef)');
   });
 });
 define('visualisationapp/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {

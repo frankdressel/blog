@@ -29,11 +29,15 @@ define('visualisationapp/components/dygraph-fileview', ['exports', 'ember'], fun
                 // state
                 me.set('fileview', e.state);
 
-                var g = new Dygraph(document.getElementById("graph"), 'http://localhost:8080/data/' + me.get('topic') + '/' + e.state);
+                var g = draw(me.get('topic'), e.state);
             };
+        },
+        draw: function draw(topic, state) {
+            return new Dygraph(document.getElementById("graph"), 'http://localhost:8080/data/' + topic + '/' + state);
         },
         didRender: function didRender() {
             window.addEventListener("popstate", this.listener(this));
+            this.draw(this.get('topic'), history.state);
         },
         willDestroyElement: function willDestroyElement() {
             window.removeEventListener("popstate", this.listener);
@@ -272,10 +276,10 @@ define('visualisationapp/routes/topic', ['exports', 'ember'], function (exports,
                 self.get('ajax').request('http://localhost:8080/toc/' + param.topic_id + '/files').then(function (data) {
 
                     var last = data.splice(data.lenggth - 2, 1)[0];
-                    history.replaceState(last, null, null);
+                    history.replaceState(last, last, null);
 
                     data.forEach(function (d) {
-                        return history.pushState(d, null, null);
+                        return history.pushState(d, last, null);
                     });
 
                     resolve({ latest: last, topic: param.topic_id });

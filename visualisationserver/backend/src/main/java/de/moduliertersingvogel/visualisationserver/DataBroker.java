@@ -68,7 +68,7 @@ public class DataBroker {
 					list.stream().map(d -> d.toString()).collect(Collectors.toList()));
 			return Response.status(Status.CREATED).build();
 		} catch (IOException e) {
-			logger.error(Arrays.stream(e.getStackTrace()).map(s -> s.toString()).collect(Collectors.joining("\n")));
+			logger.catching(e);
 			return Response.serverError().entity("Error while writing file.").build();
 		}
 	}
@@ -101,7 +101,7 @@ public class DataBroker {
 			Files.write(path, data.stream().map(d -> d.toString()).collect(Collectors.toList()));
 			return Response.status(Status.CREATED).build();
 		} catch (Exception e) {
-			logger.error(Arrays.stream(e.getStackTrace()).map(s -> s.toString()).collect(Collectors.joining("\n")));
+			logger.catching(e);
 			return Response.serverError().entity("Error while writing file.").build();
 		}
 	}
@@ -115,7 +115,7 @@ public class DataBroker {
 					.collect(Collectors.joining("\n"));
 			return Response.ok(content).build();
 		} catch (IOException e) {
-			logger.error(Arrays.stream(e.getStackTrace()).map(s -> s.toString()).collect(Collectors.joining("\n")));
+			logger.catching(e);
 			return Response.serverError().entity("Error while retrieving file.").build();
 		}
 	}

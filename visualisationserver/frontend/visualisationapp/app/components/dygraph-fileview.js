@@ -10,11 +10,15 @@ export default Ember.Component.extend({
             // state
             me.set('fileview', e.state);
 
-            let g = new Dygraph(document.getElementById("graph"), 'http://localhost:8080/data/'+me.get('topic')+'/'+e.state);
+            let g = draw(me.get('topic'), e.state);
         }
+    },
+    draw(topic, state){
+        return new Dygraph(document.getElementById("graph"), 'http://localhost:8080/data/'+topic+'/'+state);
     },
     didRender() {
         window.addEventListener("popstate", this.listener(this));
+        this.draw(this.get('topic'), history.state);
     },
     willDestroyElement() {
         window.removeEventListener("popstate", this.listener);

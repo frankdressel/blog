@@ -26,7 +26,7 @@ public class TableOfContent {
 			String[] topics = Files.list(Utils.getTopicBasePath()).map(p->p.getFileName().toString()).collect(Collectors.toList()).toArray(new String[0]);
 			return Response.ok(topics).build();
 		} catch (Exception e) {
-			logger.error(e.getStackTrace());
+			logger.catching(e);
 			return Response.serverError().entity("Error while retrieving topics.").build();
 		}
 	}
@@ -39,7 +39,7 @@ public class TableOfContent {
 			String[] topics = Files.list(Utils.getTopicPath(topic)).map(p->p.getFileName().toString()).collect(Collectors.toList()).toArray(new String[0]);
 			return Response.ok(topics).build();
 		} catch (Exception e) {
-			logger.error(Arrays.stream(e.getStackTrace()).map(s->s.toString()).collect(Collectors.joining("\n")));
+			logger.catching(e);
 			return Response.serverError().entity("Error while retrieving files for topic: "+topic+".").build();
 		}
 	}
