@@ -14,6 +14,6 @@ public class Data {
 
 	@Override
 	public String toString() {
-		return String.format("%s, %s", this.date, this.values.stream().map(d->d.toString()).collect(Collectors.joining(", ")));
+		return String.format("%s,%s", this.date, this.values.stream().map(d->d.toString()).collect(Collectors.joining(",")));
 	}
 }

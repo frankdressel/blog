@@ -3,6 +3,7 @@ package de.moduliertersingvogel.visualisationserver;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class DataBroker {
 	@POST
 	@Path("{topic}/multiple")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response receiveMultiple(@PathParam("topic") String topic, List<List<RawData>> data) {
+	public Response receiveMultiple(@PathParam("topic") String topic, String[] columnNames, List<List<RawData>> data) {
 		logger.debug("Receiving data for topic: " + topic);
 		boolean validData = data.stream().map(l->l.stream().map(r->r.date instanceof String || r.date instanceof Number).reduce((p, c)->p&&c).get()).reduce((p, c)->p&&c).get();
 		if(!validData){
@@ -76,7 +77,7 @@ public class DataBroker {
 	@POST
 	@Path("{topic}/single")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response receiveSingle(@PathParam("topic") String topic, Data[] input) {
+	public Response receiveSingle(@PathParam("topic") String topic, String[] columnNames, Data[] input) {
 		logger.debug("Receiving data for topic: " + topic);
 		boolean validData = Arrays.stream(input).map(d->d.date instanceof String || d.date instanceof Number).reduce((p, c)->p&&c).get();
 		if(!validData){
@@ -98,7 +99,8 @@ public class DataBroker {
 			File file = path.toAbsolutePath().toFile();
 			file.getParentFile().mkdirs();
 			file.createNewFile();
-			Files.write(path, data.stream().map(d -> d.toString()).collect(Collectors.toList()));
+			Files.write(path, Arrays.asList(Arrays.stream(columnNames).collect(Collectors.joining(","))));
+			Files.write(path, data.stream().map(d -> d.toString()).collect(Collectors.toList()), StandardOpenOption.APPEND);
 			return Response.status(Status.CREATED).build();
 		} catch (Exception e) {
 			logger.catching(e);
