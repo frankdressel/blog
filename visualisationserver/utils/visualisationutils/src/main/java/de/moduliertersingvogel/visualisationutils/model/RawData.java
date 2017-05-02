@@ -1,4 +1,4 @@
-package de.moduliertersingvogel.visualisationutils;
+package de.moduliertersingvogel.visualisationutils.model;
 
 public class RawData {
 	public final Object date;

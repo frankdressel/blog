@@ -22,8 +22,8 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.moduliertersingvogel.visualisationutils.Data;
-import de.moduliertersingvogel.visualisationutils.RawData;
+import de.moduliertersingvogel.visualisationutils.model.Data;
+import de.moduliertersingvogel.visualisationutils.model.RawData;
 
 @Path("/data")
 public class DataBroker {

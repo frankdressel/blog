@@ -13,8 +13,8 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 
-import de.moduliertersingvogel.visualisationutils.Data;
-import de.moduliertersingvogel.visualisationutils.RawData;
+import de.moduliertersingvogel.visualisationutils.model.Data;
+import de.moduliertersingvogel.visualisationutils.model.RawData;
 
 public class Client {
 	private final String uri;

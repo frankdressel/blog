@@ -1,4 +1,4 @@
-package de.moduliertersingvogel.visualisationutils;
+package de.moduliertersingvogel.visualisationutils.model;
 
 import java.util.List;
 import java.util.stream.Collectors;
