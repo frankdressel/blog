@@ -1,0 +1,14 @@
+---
+  - name: Remove old jdk versions
+    apt:
+        name: openjdk-7-*
+        state: absent
+  - name: Add backport repository  
+    apt_repository:
+      repo: deb http://ftp.debian.org/debian jessie-backports main
+      state: present
+      update_cache: yes
+  - name: Install Java
+    apt:
+      name: openjdk-8-jdk
+      default_release: jessie-backports

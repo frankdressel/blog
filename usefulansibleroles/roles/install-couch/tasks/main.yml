@@ -1,0 +1,11 @@
+---
+  - name: Creates directory
+    file: path=/couchdb/data state=directory
+    
+  - name: Start Couchdb container
+    docker_container:
+      name: couchdb
+      image: klaemo/couchdb:latest
+      restart_policy: always
+      published_ports: 5984:5984
+      volumes: /couchdb/data:/opt/couchdb/data

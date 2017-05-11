@@ -1,0 +1,11 @@
+---
+  - name: Install easy_install
+    apt:
+      name: python-setuptools 
+  - name: Install pip with easy installeasy_install
+    easy_install:
+      name: pip
+      state: present
+  - name: Install docker-py
+    pip:
+      name: docker-py

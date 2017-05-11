@@ -1,0 +1,31 @@
+---
+
+  - name: Install requirements for docker
+    apt:
+      name: "{{ item }}"
+      state: installed
+      update_cache: yes
+    with_items:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+      
+  - name: Add key for docker-repo
+    apt_key:
+      url: http://download.docker.com/linux/debian/gpg
+      id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+      state: present
+    
+  - name: Add docker repo
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/debian jessie stable
+      state: present
+
+  - name: Install docker-ce
+    apt:
+      name: docker-ce
+      state: installed
+      update_cache: yes
+    notify: Start docker service
