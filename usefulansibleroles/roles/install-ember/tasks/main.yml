@@ -1,0 +1,3 @@
+---
+  - name: Install ember
+    command: npm install -g ember-cli

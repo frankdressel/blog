@@ -1,0 +1,22 @@
+---
+  - name: Ensure apt-transport-https is installed.
+    apt: name=apt-transport-https state=present
+
+  - name: Add Nodesource apt key.
+    apt_key:
+      url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+      state: present
+
+  - name: Add NodeSource repositories for Node.js.
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+    with_items:
+      - "deb https://deb.nodesource.com/node_7.x jessie main"
+      - "deb-src https://deb.nodesource.com/node_7.x jessie main"
+
+  - name: Install node
+    apt:
+      name: nodejs
+      state: present
+      update_cache: yes
