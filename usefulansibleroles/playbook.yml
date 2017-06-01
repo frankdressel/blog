@@ -1,0 +1,11 @@
+- name: playbook
+  hosts: all
+  become: true
+  
+  roles:
+    - install-dockerce
+    - install-docker-py
+    - install-couch
+    - install-java8
+    - install-maven
+    - install-vim
