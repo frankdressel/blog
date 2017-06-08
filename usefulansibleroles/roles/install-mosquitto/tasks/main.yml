@@ -1,0 +1,5 @@
+---
+  - name: Install mosquitto
+    apt:
+      name: mosquitto
+      state: present
