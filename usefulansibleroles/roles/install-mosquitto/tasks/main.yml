@@ -3,3 +3,8 @@
     apt:
       name: mosquitto
       state: present
+
+  - name: Install mosquitto-clients
+    apt:
+      name: mosquitto-clients
+      state: present
