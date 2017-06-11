@@ -14,12 +14,12 @@
       path: /etc/apt/apt.conf.d/20auto-upgrades
       state: touch
     when: stat_result.stat.exists == False 
-	
+
   - name: Check config in file
     lineinfile:
       path: /etc/apt/apt.conf.d/20auto-upgrades
       line: 'APT::Periodic::Update-Package-Lists "1";'
-	  
+
   - name: Check config in file
     lineinfile:
       path: /etc/apt/apt.conf.d/20auto-upgrades
