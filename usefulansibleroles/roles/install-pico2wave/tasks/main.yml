@@ -1,0 +1,10 @@
+---
+  - name: Add nonfree repository
+    apt_repository:
+      repo: deb http://http.us.debian.org/debian stable main contrib non-free
+      state: present
+      update_cache: yes
+  - name: Install pico2wave
+    apt:
+      name: libttspico-utils
+

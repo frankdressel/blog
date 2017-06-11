@@ -12,3 +12,4 @@
     - install-ntp
     - install-mosquitto
     - unattended-upgrades
+    - install-pico2wave
