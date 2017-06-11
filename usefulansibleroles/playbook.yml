@@ -9,6 +9,6 @@
     - install-java8
     - install-maven
     - install-vim
-	- install-ntp
-	- install-mosquitto
-	- unattended-upgrades
+    - install-ntp
+    - install-mosquitto
+    - unattended-upgrades
