@@ -13,3 +13,4 @@
     - install-mosquitto
     - unattended-upgrades
     - install-pico2wave
+    - install-python3
