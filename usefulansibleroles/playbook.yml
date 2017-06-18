@@ -14,3 +14,4 @@
     - unattended-upgrades
     - install-pico2wave
     - install-python3
+    - install-apache

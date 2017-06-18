@@ -1,0 +1,11 @@
+---
+  - name: Install apache
+    apt:
+      name: apache2
+      update_cache: yes
+      state: latest
+
+  - name: Enable mod-rewrite
+    apache2_module: name=rewrite state=present
+    notify:
+      - restart apache2
