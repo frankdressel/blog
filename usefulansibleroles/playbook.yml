@@ -3,15 +3,4 @@
   become: true
   
   roles:
-    - install-dockerce
-    - install-docker-py
-    - install-couch
-    - install-java8
-    - install-maven
-    - install-vim
-    - install-ntp
-    - install-mosquitto
-    - unattended-upgrades
-    - install-pico2wave
-    - install-python3
-    - install-apache
+    - install-jupyter

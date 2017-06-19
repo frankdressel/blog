@@ -1,0 +1,20 @@
+---
+  - name: Install Jupyter
+    pip:
+      executable: pip3
+      name: jupyter
+
+  - name: Setup apache proxy pass
+    lineinfile:
+      dest: /etc/apache2/sites-available/000-default.conf
+      regexp: "ProxyPass /jupyter.*"
+      line: ProxyPass /jupyter/ http://localhost:8888/
+      insertbefore: "</VirtualHost>"
+
+  - name: Setup apache proxy pass reverse
+    lineinfile:
+      dest: /etc/apache2/sites-available/000-default.conf
+      regexp: "ProxyPassReverse /jupyter.*"
+      line: ProxyPassReverse /jupyter/ http://localhost:8888/
+      insertbefore: "</VirtualHost>"
+    notify: restart apache2

@@ -5,7 +5,9 @@
       update_cache: yes
       state: latest
 
-  - name: Enable mod-rewrite
-    apache2_module: name=rewrite state=present
-    notify:
-      - restart apache2
+  - name: Enable mod-proxy
+    apache2_module: name=proxy state=present
+
+  - name: Enable mod-proxy-http
+    apache2_module: name=proxy_http state=present
+    notify: retstart apache2
