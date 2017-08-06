@@ -1,0 +1,64 @@
+---
+- name: 1. Create git user
+  become: true
+  user:
+    name: git
+
+- name: 2. Get gogs release
+  become: true
+  unarchive:
+    src: https://dl.gogs.io/0.11.19/raspi2_armv6.zip
+    dest: /home/git
+    remote_src: true
+    owner: git
+    group: git
+
+- name: 3a. Install MariaDB
+  become: true
+  apt:
+    name: mariadb-server
+    update_cache: yes
+
+- name: 3b. Start and enable service
+  service: name=mysql state=started enabled=yes
+
+- name: 3c. Install python mysql module
+  become: true
+  apt:
+    name: python-mysqldb
+    state: latest
+
+- name: 3d. Create git database user
+  mysql_user:
+    name: git
+    password: git
+    priv: '*.*:ALL'
+    login_user: root
+
+- name: 4. Copy gogs service file
+  become: true
+  copy:
+    src: /home/git/gogs/scripts/systemd/gogs.service
+    dest: /etc/systemd/system/gogs.service
+    remote_src: true
+
+- name: 5a. Configure gogs service
+  become: true
+  lineinfile:
+    path: /etc/systemd/system/gogs.service
+    regexp: 'After=mariadb\.service.*'
+    line: After=mysql.service
+
+- name: 5b. Configure gogs service
+  become: true
+  lineinfile:
+    path: /etc/systemd/system/gogs.service
+    regexp: 'ExecStart.*'
+    line: ExecStart=/home/git/gogs/gogs web
+
+- name: 6. Enable and start service
+  become: true
+  service:
+    name: gogs
+    enabled: yes
+    state: started
