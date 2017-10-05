@@ -1,6 +1,6 @@
 ---
 - name: install vim
-  hosts: ansibletest
+  hosts: raspberrypi
   become: true
 
   tasks:
@@ -39,13 +39,14 @@
       git: repo=https://github.com/vim/vim.git  dest=/tmp/vim
 
     - name: install vim
+      become: true
       script: installVim.sh
 
     - name: remove vim directory
       command: rm -rf /tmp/vim
 
 - name: setup vim
-  hosts: all
+  hosts: raspberrypi
 
   tasks:
     - name: install vundle
