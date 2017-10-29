@@ -46,7 +46,7 @@
       command: rm -rf /tmp/vim
 
 - name: setup vim
-  hosts: raspberrypi
+  hosts: all
 
   tasks:
     - name: install vundle
@@ -60,3 +60,8 @@
 
     - name: install vim plugins
       command: vim +PluginInstall +qall
+
+    - name: install ycmd
+      command: ./install.py
+      args:
+        chdir: ~/.vim/bundle/YouCompleteMe  
