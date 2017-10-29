@@ -1,6 +1,6 @@
 ---
 - name: install vim
-  hosts: raspberrypi
+  hosts: all
   become: true
 
   tasks:
