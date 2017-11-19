@@ -29,3 +29,8 @@
       state: installed
       update_cache: yes
     notify: Start docker service
+
+  - name: Install docker-compose
+    pip:
+      executable: pip3
+      name: docker-compose

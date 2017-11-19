@@ -3,6 +3,7 @@
   become: true
   
   roles:
+    - install-python3
     - install-dockerce
     - install-docker-py
     - install-couch
@@ -13,6 +14,5 @@
     - install-mosquitto
     - unattended-upgrades
     - install-pico2wave
-    - install-python3
     - install-apache
     - install-gogs
