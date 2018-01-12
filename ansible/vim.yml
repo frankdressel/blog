@@ -35,6 +35,7 @@
         - git
         - checkinstall
         - cmake
+        - fonts-powerline
 
     - name: clone vim
       git: repo=https://github.com/vim/vim.git  dest=/tmp/vim
