@@ -35,13 +35,11 @@
         - git
         - checkinstall
         - cmake
-        - fonts-powerline
 
     - name: clone vim
       git: repo=https://github.com/vim/vim.git  dest=/tmp/vim
 
     - name: install vim
-      become: true
       script: installVim.sh
 
     - name: remove vim directory
@@ -51,6 +49,22 @@
   hosts: all
 
   tasks:
+    - name: install dependencies for plugins
+      become: true
+      apt: pkg={{item}} state=present
+      with_items:
+        - fonts-powerline
+        - opam
+
+    - name: init opam
+      command: opam init -y
+
+    - name: install merlin
+      command: opam install -y merlin
+      
+    - name: setup merlin
+      command: opam user-setup install
+
     - name: install vundle
       git: repo=https://github.com/VundleVim/Vundle.vim.git dest=/home/{{ ansible_ssh_user }}/.vim/bundle/Vundle.vim
 
