@@ -1,69 +1,13 @@
----
-- name: install vim
-  hosts: all
-  become: true
-
-  tasks:
-    - name: get aptitude for upgrade
-      apt: pkg=aptitude state=present
-
-    - name: remove old vim
-      apt: pkg={{ item }} state=absent
-      with_items:
-        - vim
-        - vim-runtime
-        - vim-tiny
-        - vim-common
-        - gvim
-
-    - name: install base packages
-      apt: pkg={{item}} state=present
-      with_items:
-        - libncurses5-dev
-        - libgnome2-dev
-        - libgnomeui-dev
-        - libgtk2.0-dev
-        - libatk1.0-dev
-        - libbonoboui2-dev
-        - libcairo2-dev
-        - libx11-dev
-        - libxpm-dev
-        - libxt-dev
-        - python
-        - python-dev
-        - ruby-dev
-        - git
-        - checkinstall
-        - cmake
-        - fonts-powerline
-
-    - name: clone vim
-      git: repo=https://github.com/vim/vim.git  dest=/tmp/vim
-
-    - name: install vim
-      become: true
-      script: installVim.sh
-
-    - name: remove vim directory
-      command: rm -rf /tmp/vim
-
 - name: setup vim
   hosts: all
 
   tasks:
-    - name: install vundle
-      git: repo=https://github.com/VundleVim/Vundle.vim.git dest=/home/{{ ansible_ssh_user }}/.vim/bundle/Vundle.vim
 
-    - name: clone vimrc
-      git: repo=https://github.com/frankdressel/blog.git dest=/tmp/blog
+    - name: Init opam
+      command: opam init -y
 
-    - name: copy vimrc
-      command: cp /tmp/blog/ansible/.vimrc /home/{{ ansible_ssh_user }}
+    - name: Install merlin
+      command: opam install -y merlin
 
-    - name: install vim plugins
-      command: vim +PluginInstall +qall
-
-    - name: install ycmd
-      command: ./install.py
-      args:
-        chdir: ~/.vim/bundle/YouCompleteMe  
+    - name: Setup merlin
+      command: opam user-setup install
