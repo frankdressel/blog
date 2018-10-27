@@ -74,6 +74,19 @@
     - name: copy vimrc
       command: cp /tmp/blog/ansible/.vimrc /home/{{ ansible_ssh_user }}
   
+    - name: Create symlink dir as fix for syntax plugin
+      become: true
+      file:
+        path: /usr/share/vim/vim80/syntax/
+        state: directory
+
+    - name: Create symlink as fix for syntax plugin
+      become: true
+      file:
+        src: /usr/share/vim/vim81/syntax/syntax.vim
+        dest: /usr/share/vim/vim80/syntax/syntax.vim
+        state: link
+
     - name: install vim plugins
       command: vim +PluginInstall +qall
   
