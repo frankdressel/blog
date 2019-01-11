@@ -1,0 +1,13 @@
+---
+  - name: Configure keys
+    blockinfile:
+      path: /etc/mosquitto/conf.d/{{ ansible_facts['nodename'] }}.conf
+      create: yes
+      block: |
+        port 8883
+        cafile /etc/keys/rootCA.crt
+        certfile /etc/keys/{{ ansible_facts['nodename'] }}.crt
+        keyfile /etc/keys/{{ ansible_facts['nodename'] }}.key
+
+  - name: Restart mosquitto
+    command: systemctl restart mosquitto.service

@@ -1,0 +1,20 @@
+---
+  - name: Create folder for keys
+    file:
+      path: /etc/keys
+      state: directory
+
+  - name: Create root key
+    command: openssl genrsa -out /etc/keys/rootCA.key 2048
+
+  - name: Create root certificate
+    command: openssl req -x509 -new -nodes -key /etc/keys/rootCA.key -sha256 -days 1024 -subj "/C=DE/ST=SA/O=Private/CN=rootca" -out /etc/keys/rootCA.crt
+
+  - name: Create server key
+    command: openssl genrsa -out /etc/keys/{{ ansible_facts['nodename'] }}.key 2048
+
+  - name: Create signing request
+    command: openssl req -new -sha256 -key /etc/keys/{{ ansible_facts['nodename'] }}.key -subj "/C=DE/ST=SA/O=Private/CN={{ ansible_facts['nodename'] }}" -out /etc/keys/{{ ansible_facts['nodename'] }}.csr
+
+  - name: Create server certificate
+    command: openssl x509 -req -in /etc/keys/{{ ansible_facts['nodename'] }}.csr -CA /etc/keys/rootCA.crt -CAkey /etc/keys/rootCA.key -CAcreateserial -out /etc/keys/{{ ansible_facts['nodename'] }}.crt -days 3650 -sha256
