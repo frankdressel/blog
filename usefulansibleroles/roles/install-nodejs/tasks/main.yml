@@ -1,13 +1,13 @@
 ---
   - name: Download install script
     get_url:
-      url: https://deb.nodesource.com/setup_8.x
-      dest: /tmp/setup_8.x
+      url: https://deb.nodesource.com/setup_13.x
+      dest: /tmp/setup_13.x
       mode: u+rwx
 
   - name: Execute install script
     become: true
-    shell: /tmp/setup_8.x
+    shell: /tmp/setup_13.x
 
   - name: Install nodejs
     become: true
