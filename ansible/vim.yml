@@ -34,6 +34,8 @@
         - libxt-dev
         - python
         - python-dev
+        - python3
+        - python3-dev
         - ruby-dev
         - git
         - checkinstall
