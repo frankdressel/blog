@@ -7,7 +7,7 @@
 - name: 2. Get gogs release
   become: true
   unarchive:
-    src: https://dl.gogs.io/0.11.19/raspi2_armv6.zip
+    src: https://github.com/gogs/gogs/releases/download/v0.12.3/gogs_0.12.3_linux_armv8.zip
     dest: /home/git
     remote_src: true
     owner: git
@@ -22,18 +22,23 @@
 - name: 3b. Start and enable service
   service: name=mysql state=started enabled=yes
 
-- name: 3c. Install python mysql module
+- name: 3c. Install pip
   become: true
   apt:
-    name: python-mysqldb
-    state: latest
+    name: python3-pip
 
-- name: 3d. Create git database user
+- name: 3d. Install PyMySQL
+  pip:
+    name: PyMySQL
+
+- name: 3e. Create git database user
+  become: true
   mysql_user:
     name: git
     password: git
     priv: '*.*:ALL'
-    login_user: root
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    login_user: 'root'
 
 - name: 4. Copy gogs service file
   become: true
