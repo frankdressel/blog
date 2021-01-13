@@ -3,12 +3,13 @@
   become: true
   user:
     name: git
+    system: yes
 
 - name: 2. Get gogs release
   become: true
   unarchive:
     src: https://github.com/gogs/gogs/releases/download/v0.12.3/gogs_0.12.3_linux_armv8.zip
-    dest: /home/git
+    dest: /srv
     remote_src: true
     owner: git
     group: git
@@ -28,6 +29,7 @@
     name: python3-pip
 
 - name: 3d. Install PyMySQL
+  become: true
   pip:
     name: PyMySQL
 
@@ -50,7 +52,7 @@
 - name: 4. Copy gogs service file
   become: true
   copy:
-    src: /home/git/gogs/scripts/systemd/gogs.service
+    src: /srv/gogs/scripts/systemd/gogs.service
     dest: /etc/systemd/system/gogs.service
     remote_src: true
 
@@ -66,7 +68,14 @@
   lineinfile:
     path: /etc/systemd/system/gogs.service
     regexp: 'ExecStart.*'
-    line: ExecStart=/home/git/gogs/gogs web
+    line: ExecStart=/srv/gogs/gogs web
+
+- name: 5c. Configure gogs service
+  become: true
+  lineinfile:
+    path: /etc/systemd/system/gogs.service
+    regexp: 'WorkingDirectory.*'
+    line: WorkingDirectory=/srv/gogs
 
 - name: 6. Enable and start service
   become: true
