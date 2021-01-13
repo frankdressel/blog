@@ -1,0 +1,17 @@
+---
+- name: 1. Install ipfs
+  become: true
+  snap:
+    name: ipfs
+
+- name: 2. IPFS init
+  shell: ipfs init
+
+- name: 3. Remove existing bootstrap nodes
+  shell: ipfs bootstrap rm --all
+
+- name: 4. Add swarm key
+  shell: echo "/key/swarm/psk/1.0.0/\n/base16/\n{{ swarm_key }}"
+
+- name: 5. Add bootstrap node id
+  shell: ipfs bootstrap add "{{ bootstrap_node }}"
