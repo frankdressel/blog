@@ -1,0 +1,14 @@
+---
+- name: "Get packages"
+  package_facts:
+    manager: "auto"
+
+- name: 1. Install ipfs arm_64
+  become: true
+  shell: 'cd /tmp && wget https://dist.ipfs.io/go-ipfs/v0.7.0/go-ipfs_v0.7.0_linux-arm64.tar.gz && tar -xvzf go-ipfs_v0.7.0_linux-arm64.tar.gz && cd go-ipfs && bash install.sh'
+  when: "'ipfs' not in ansible_facts.packages and ansible_architecture == 'arm_64'"
+
+- name: 1. Install ipfs amd_64
+  become: true
+  shell: 'cd /tmp && wget https://dist.ipfs.io/go-ipfs/v0.7.0/go-ipfs_v0.7.0_linux-amd64.tar.gz && tar -xvzf go-ipfs_v0.7.0_linux-amd64.tar.gz && cd go-ipfs && bash install.sh'
+  when: "'ipfs' not in ansible_facts.packages and ansible_architecture == 'amd_64'"

@@ -1,17 +1,21 @@
 ---
-- name: 1. Install ipfs
-  become: true
-  snap:
-    name: ipfs
+- name: 1. Check if there is already an ipfs folder
+  stat:
+    path: ~/.ipfs
+  register: stat_result
 
 - name: 2. IPFS init
   shell: ipfs init
+  when: not stat_result.stat.exists
 
 - name: 3. Remove existing bootstrap nodes
   shell: ipfs bootstrap rm --all
+  when: not stat_result.stat.exists
 
 - name: 4. Add swarm key
   shell: echo "/key/swarm/psk/1.0.0/\n/base16/\n{{ swarm_key }}"
+  when: not stat_result.stat.exists
 
 - name: 5. Add bootstrap node id
   shell: ipfs bootstrap add "{{ bootstrap_node }}"
+  when: not stat_result.stat.exists

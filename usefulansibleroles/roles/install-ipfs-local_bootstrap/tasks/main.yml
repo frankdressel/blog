@@ -1,29 +1,34 @@
 ---
-- name: 1. Install ipfs
+- name: 1. Check if there is already an ipfs folder
   become: true
-  snap:
-    name: ipfs
+  stat:
+    path: ~/.ipfs
+  register: stat_result
 
 - name: 2. IPFS init
   become: true
   shell: ipfs init
+  when: not stat_result.stat.exists
 
 - name: 3. Remove existing bootstrap nodes
   become: true
   shell: ipfs bootstrap rm --all
+  when: not stat_result.stat.exists
 
   # See: https://medium.com/@s_van_laar/deploy-a-private-ipfs-network-on-ubuntu-in-5-steps-5aad95f7261b
 - name: 4. Create swarm key
   become: true
-  shell: echo "/key/swarm/psk/1.0.0/\n/base16/\n`tr -dc 'a-f0-9' < /dev/urandom | head -c64`" > ~/snap/ipfs/common/swarm.key
+  shell: echo "/key/swarm/psk/1.0.0/\n/base16/\n`tr -dc 'a-f0-9' < /dev/urandom | head -c64`" > ~/.ipfs/swarm.key
+  when: not stat_result.stat.exists
 
 - name: 5. Add bootstrap node id
   become: true
   shell: ipfs bootstrap add '/ip4/'$(ip route get 8.8.8.8 | tr -s ' ' | cut -d' ' -f7)'/tcp/4001/ipfs/'$(ipfs config show | grep PeerID | tr -s ' ' | cut -d ' ' -f 3 | tr -d '\\"')
+  when: not stat_result.stat.exists
 
 - name: 6. Create status message
   become: true
-  shell: 'echo "Swarm key: "$(cat /root/snap/ipfs/common/swarm.key | tail -n 1) ; echo "Bootstrap node: "$(ipfs bootstrap list | head -n 1)'
+  shell: 'echo "Swarm key: "$(cat ~/.ipfs/swarm.key | tail -n 1) ; echo "Bootstrap node: "$(ipfs bootstrap list | head -n 1)'
   register: status
 
 - name: 7. Print status message
