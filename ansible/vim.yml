@@ -61,10 +61,10 @@
         state: present
 
     - name: install vundle
-      git: repo=https://github.com/VundleVim/Vundle.vim.git dest=/home/{{ ansible_ssh_user }}/.vim/bundle/Vundle.vim
+      git: repo=https://github.com/VundleVim/Vundle.vim.git dest={{ ansible_env.HOME }}/.vim/bundle/Vundle.vim
 
     - name: copy vimrc
-      command: cp .vimrc /home/{{ ansible_ssh_user }}
+      command: cp .vimrc {{ ansible_env.HOME }}
   
     - name: Make ycm
       file: name=~/.vim/bundle state=directory
