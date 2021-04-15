@@ -16,3 +16,4 @@
     - install-pico2wave
     - install-apache
     - install-gogs
+    - install-go

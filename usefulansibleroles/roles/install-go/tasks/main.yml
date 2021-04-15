@@ -1,0 +1,16 @@
+---
+  - name: Download go
+    get_url:
+      url: https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
+      dest: /tmp/go1.16.3.linux-amd64.tar.gz
+
+  - name: Unzip & copy
+    become: yes
+    ansible.builtin.shell:
+      cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf /tmp/go1.16.3.linux-amd64.tar.gz"
+
+  - name: Add path
+    become: yes
+    ansible.builtin.lineinfile:
+      line: export PATH=$PATH:/usr/local/go/bin
+      path: /etc/profile
