@@ -1,13 +1,21 @@
 ---
   - name: Download go
+    when: ansible_architecture is match("arm.*")
+    get_url:
+      url: https://golang.org/dl/go1.16.3.linux-armv6l.tar.gz
+      dest: /tmp/go1.16.3.linux.tar.gz
+
+  - name: Download go
+    when: ansible_architecture is not match("arm.*")
     get_url:
       url: https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
-      dest: /tmp/go1.16.3.linux-amd64.tar.gz
+      dest: /tmp/go1.16.3.linux.tar.gz
 
   - name: Unzip & copy
     become: yes
+    when: ansible_architecture is match("arm.*")
     ansible.builtin.shell:
-      cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf /tmp/go1.16.3.linux-amd64.tar.gz"
+      cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf /tmp/go1.16.3.linux.tar.gz"
 
   - name: Add path
     become: yes
