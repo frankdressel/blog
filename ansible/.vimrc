@@ -18,6 +18,7 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'Raimondi/delimitMate'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+Plugin 'preservim/tagbar'
 call vundle#end()
 
 filetype plugin indent on
@@ -69,6 +70,9 @@ set splitright
 " Taken from: http://statico.github.io/vim.html
 nmap j gj
 nmap k gk
+
+" Tagbar
+nmap <F8> :TagbarToggle<CR>
 
 set incsearch
 set ignorecase
