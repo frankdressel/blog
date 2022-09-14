@@ -1,11 +1,45 @@
 ---
+  - name: Make sure podman is installed
+    ansible.builtin.apt:
+      name: podman
+      state: present
+
   - name: Creates directory
     file: path=/couchdb/data state=directory
+
+  - name: Creates directory
+    file: path=/couchdb/etc state=directory
+
+  - name: Copy ini file
+    copy:
+      src: files/local.ini
+      dest: /couchdb/etc/local.ini  
     
-  - name: Start Couchdb container
-    docker_container:
+  - name: Load password variable
+    ansible.builtin.include_vars:
+      file: files/admin.json
+      name: admin
+
+  - name: Replace admin password
+    ansible.builtin.replace:
+      path: /couchdb/etc/local.ini
+      regexp: 'mysecretpassword'
+      replace: "{{ admin.admin_passwd }}"
+
+  - name: Pull an image
+    containers.podman.podman_image:
       name: couchdb
-      image: klaemo/couchdb:latest
-      restart_policy: always
+
+  - name: Start Couchdb container
+    containers.podman.podman_container:
+      name: couch
+      image: couchdb
       published_ports: 5984:5984
-      volumes: /couchdb/data:/opt/couchdb/data
+      volumes:
+        - /couchdb/data:/opt/couchdb/data
+        - /couchdb/etc:/opt/couchdb/etc/local.d
+      generate_systemd:
+        path: /tmp/
+        restart_policy: always
+        names: true
+        container_prefix: container
