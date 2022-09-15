@@ -35,6 +35,7 @@
       name: couch
       image: couchdb
       published_ports: 5984:5984
+      recreate: yes
       volumes:
         - /couchdb/data:/opt/couchdb/data
         - /couchdb/etc:/opt/couchdb/etc/local.d
