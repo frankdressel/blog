@@ -1,0 +1,29 @@
+---
+  - name: Install nmcli
+    apt:
+        name: network-manager
+        state: present
+
+  - name: Remove AP
+    community.general.nmcli:
+      conn_name: "{{ hotspot_connectionname }}"
+      ifname: wlan0
+      ssid: "{{ hotspot_ssid }}"
+      state: absent
+
+  - name: Setup AP
+    community.general.nmcli:
+      autoconnect: true
+      conn_name: "{{ hotspot_connectionname }}"
+      ifname: wlan0
+      method4: shared
+      ssid: "{{ hotspot_ssid }}"
+      state: present
+      type: wifi
+      wifi:
+        band: bg
+        mode: ap
+      wifi_sec:
+        key-mgmt: wpa-psk
+        psk: "{{ hotspot_pass }}"
+
