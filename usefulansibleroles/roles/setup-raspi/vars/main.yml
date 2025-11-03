@@ -1,3 +1,5 @@
 hotspot_connectionname: ""
 hotspot_ssid: ""
 hotspot_pass: ""
+wifi_ssid: ""
+wifi_passwd: ""

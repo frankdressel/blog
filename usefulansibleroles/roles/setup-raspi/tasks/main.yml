@@ -4,6 +4,20 @@
         name: network-manager
         state: present
 
+  - name: Deactivate powersafe
+    community.general.nmcli:
+      conn_name: "wlan"
+      type: wifi
+      ifname: wlan1
+      wifi:
+        powersave: 2
+      ssid: "{{ wifi_ssid }}"
+      wifi_sec:
+        key-mgmt: wpa-psk
+        psk: "{{ wifi_passwd }}"
+      autoconnect: true
+      state: present
+
   - name: Remove AP
     community.general.nmcli:
       conn_name: "{{ hotspot_connectionname }}"
