@@ -4,6 +4,11 @@
         name: network-manager
         state: present
 
+  - name: Install tmux
+    apt:
+        name: tmux
+        state: present
+
   - name: Deactivate powersafe
     community.general.nmcli:
       conn_name: "wlan"
