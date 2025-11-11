@@ -32,8 +32,6 @@
         - libx11-dev
         - libxpm-dev
         - libxt-dev
-        - python
-        - python-dev
         - python3
         - python3-dev
         - ruby-dev
@@ -43,7 +41,7 @@
         - universal-ctags
 
     - name: clone vim
-      git: repo=https://github.com/vim/vim.git  dest=/tmp/vim
+      git: repo=https://github.com/vim/vim.git dest=/tmp/vim depth=1
 
     - name: install vim
       script: installVim.sh
