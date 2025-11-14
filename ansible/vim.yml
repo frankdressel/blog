@@ -39,6 +39,7 @@
         - checkinstall
         - cmake
         - universal-ctags
+        - fonts-powerline
 
     - name: clone vim
       git: repo=https://github.com/vim/vim.git dest=/tmp/vim depth=1
@@ -48,33 +49,3 @@
 
     - name: remove vim directory
       command: rm -rf /tmp/vim
-
-- name: setup vim
-  hosts: all
-
-  tasks:
-    - name: install dependencies for plugins
-      become: true
-      apt:
-        name: fonts-powerline
-        state: present
-
-    - name: install vundle
-      git: repo=https://github.com/VundleVim/Vundle.vim.git dest={{ ansible_env.HOME }}/.vim/bundle/Vundle.vim
-
-    - name: copy vimrc
-      command: cp .vimrc {{ ansible_env.HOME }}
-  
-    - name: Make ycm
-      file: name=~/.vim/bundle state=directory
-
-    - name: Download ycm
-      git: repo=https://github.com/ycm-core/YouCompleteMe.git dest=~/.vim/bundle/YouCompleteMe
-
-    - name: install ycm
-      command: ./install.py --clang-completer
-      args:
-        chdir: ~/.vim/bundle/YouCompleteMe
-
-    - name: install vim plugins
-      command: vim +PluginInstall +qall
